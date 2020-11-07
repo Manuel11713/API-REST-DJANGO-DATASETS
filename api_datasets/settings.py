@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qvm7!rg$!0)r@)s@8r$qnp#gn!vo!j)d=l#@cc$2_5btymt^lh'
+SECRET_KEY = os.environ.get('SECRET_PRODUCTION','qvm7!rg$!0)r@)s@8r$qnp#gn!vo!j)d=l#@cc$2_5btymt^lh')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,12 +80,12 @@ WSGI_APPLICATION = 'api_datasets.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'abraxa',
-        'HOST': '127.0.0.1',
-        'PORT': 5432
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': os.environ.get('NAMEDB','postgres'),
+        'USER': os.environ.get('USERDB','postgres'),
+        'PASSWORD': os.environ.get('PASSWORDDB'),
+        'HOST': os.environ.get('HOSTDB','127.0.0.1'),
+        'PORT': os.environ.get('PORTDB',5432)
     }
 }
 
