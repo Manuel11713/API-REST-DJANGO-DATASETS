@@ -1,4 +1,5 @@
-FROM python:3.6
+FROM python:3.7-slim-buster
+
 ENV PYTHONUNBUFFERED=1
 
 RUN mkdir /code 
@@ -7,12 +8,17 @@ WORKDIR /code
 
 COPY . /code/
 
-RUN apt-get -y update
-RUN apt-get -y upgrade 
+RUN apt-get update
+RUN apt-get -y install software-properties-common
 
-RUN apt-get -y install gdal-bin 
-RUN apt-get -y install gdal-dev
-
-RUN pip3 install -r requirements.t
+#Requirements for GDAL
+RUN add-apt-repository ppa:ubuntugis/ppa
+RUN apt-get install -y apt-transport-https
+RUN apt-get -y install gdal-bin libgdal-dev  python-gdal python3-gdal python3-dev
+ARG CPLUS_INCLUDE_PATH=/usr/include/gdal
+ARG C_INCLUDE_PATH=/usr/include/gdal
 
 COPY . /code/
+
+RUN pip3 install -r requirements.txt
+

@@ -4,7 +4,7 @@ services:
   db:
     image: mdillon/postgis
     environment:
-      - POSTGRES_PASSWORD=abraxa 
+      - POSTGRES_PASSWORD=abraxas
     ports: 
       - "5432:5432"  
   web:
