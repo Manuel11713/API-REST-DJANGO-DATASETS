@@ -24,12 +24,12 @@ class APIDataset(APIView):
         OBJECTS_PER_PAGE = 2
 
         #We make a pagination
-        rows = Row.objects.all()#SELECT * FROM Row;
+        rows = Row.objects.all().order_by('id')#SELECT * FROM Row;
         pages = Paginator(rows, OBJECTS_PER_PAGE)
 
         #Number page should be between right bounds.
         if(number_page<=0 or number_page>pages.num_pages):
-            return Response(data="number_page should be between 1 and {}".format(pages.num_pages))
+            return Response(data="number_page should be between 1 and {}".format(pages.num_pages), status=status.HTTP_400_BAD_REQUEST)
 
         #Divide by number_page
         rows = pages.page(number_page).object_list
@@ -79,7 +79,7 @@ class APIDataset(APIView):
             newRow = Row(point = newPoint, client_id = row[2], client_name = row[3], dataset_id = newDataSet.id)
             newRow.save()
             
-        return Response(data="Saved!!!", status=200)
+        return Response(data=newDataSet.id, status=200)
     
 
 class APIRows(APIView):
