@@ -8,23 +8,23 @@ This API accepts an csv file and and store its rows in a postgresql database.
 
 This API contains 2 endpoints.
 
-    - api/v1/datasets
-    - api/v1/rows
+- api/v1/datasets
+- api/v1/rows
 
 ### api/v1/datasets
 
 **get:**Returns rows by page (2 rows per page).
-    - number_page: query param between 0 and number of pages, if you don't now the number of pages, the API returns the number of pages if you provided a wrong number_page.
+- number_page: query param between 0 and number of pages, if you don't now the number of pages, the API returns the number of pages if you provided a wrong number_page.
 **post:**Store rows from a csv file.
-    - file: form data param, csv file, must contains just latitude, longitude, client_id and client_name.
-    - name: form data param, dataset's name.
+- file: form data param, csv file, must contains just latitude, longitude, client_id and client_name.
+- name: form data param, dataset's name.
 
 ### api/v1/rows
 **get:**Returns rows filtered by dataset_id, name and point.
 
-    - dataset_id: query param, dataset's id.
-    - name: client name.
-    - point: Geographical point, latitude and longitude. (point=-5.3458497,39,23847).
+- dataset_id: query param, dataset's id.
+- name: client name.
+- point: Geographical point, latitude and longitude. (point=-5.3458497,39,23847).
 
 ## Install.
 ```sh 
@@ -61,7 +61,19 @@ $ python3 manage.py test api
 ``` 
 
 ### USAGE EXAMPLES:
-api/v1/datasets get 
+**api/v1/datasets, get**
 ![getdataset1](assets/getdataset1.png)
+![getdataset2](assets/getdataset2.png)
+![getdataset3](assets/getdataset3.png)
+
+**api/v1/rows, get**
+![getrows1](assets/getrow1.png)
+![getrows2](assets/getrows2.png)
+![getrows3](assets/getrows3.png)
+
+**test**
+![test](assets/test.png)
+
+
 
 
