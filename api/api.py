@@ -41,15 +41,12 @@ class APIDataset(APIView):
 
     def post(self, request):
 
-        #Must be a valid name
-        nameFile = request.data["name"]
-        if(not nameFile ):
-            return Response(data="Please insert a name",status=status.HTTP_400_BAD_REQUEST)
-        
-        #Must be a file
-        uploaded_file = request.data['file']
-        if(not uploaded_file ):
-            return Response(data="Please select a csv file",status=status.HTTP_400_BAD_REQUEST)
+        #name and file must be provided
+        try:
+            nameFile = request.data["name"]
+            uploaded_file = request.data['file']
+        except:
+            return Response(data="name and file must be provided",status=status.HTTP_400_BAD_REQUEST)
 
         #First we check if file's extension is a csv
         extension = re.split('\.',uploaded_file._get_name())[-1]
@@ -58,13 +55,16 @@ class APIDataset(APIView):
 
         data = pd.read_csv(uploaded_file)
         columns = data.columns
-    
+
         #Must be a valid structure
-        if( len(columns) != 4 or 
-            (columns[0] != "latitude" or columns[1] != "longitude" or columns[2] != "client_id" or columns[3] != "client_name" )
+        if(  
+            ("latitude" not in columns) or 
+            ("longitude" not in columns) or 
+            ("client_id" not in columns) or 
+            ("client_name"  not in columns)
         ):
             return Response(data = "Wrong format", status = status.HTTP_400_BAD_REQUEST)
-
+    
         #Check if dataSet exists already.
         try:
             newDataSet = DataSet.objects.get(name=nameFile)
@@ -75,8 +75,8 @@ class APIDataset(APIView):
         #Save row by row.
         for row in data.iterrows():
             row = row[1]
-            newPoint = Point(row[0],row[1])
-            newRow = Row(point = newPoint, client_id = row[2], client_name = row[3], dataset_id = newDataSet.id)
+            newPoint = Point(row['latitude'],row['longitude'])
+            newRow = Row(point = newPoint, client_id = row['client_id'], client_name = row['client_name'], dataset_id = newDataSet.id)
             newRow.save()
             
         return Response(data=newDataSet.id, status=200)
